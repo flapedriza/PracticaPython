@@ -91,8 +91,8 @@ f.close()
 parser = MHTMLParser()
 parser.feed(rdfSource)
 
-csv = open('restaurants.csv', 'wb')
-fitxer = csv.writer(csv)
+csvf = open('restaurants.csv', 'wb')
+fitxer = csv.writer(csvf, delimiter='\t')
 fitxer.writerow(["Nom"] + ["Latitud"] + ["Longitud"] + ["Telèfon 1"] + ["Telèfon 2"] +
  ["Adreça"] + ["Barri"] + ["Districte"] + ["Codi Postal"] + ["Ciutat"] + ["Regio"] +
  ["Pais"] + ["Web"] + ["Propietari"] + ["Correu electrònic"] )
@@ -103,5 +103,5 @@ for elem in allrest:
      [elem.ciutat] + [elem.regio] + [elem.pais] + [elem.web] +
      [elem.propietari] + [elem.mail])
 
-csv.close()
+csvf.close()
 
