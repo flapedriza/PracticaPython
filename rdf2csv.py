@@ -10,7 +10,7 @@ allrest=[]
 EMAIL_FORMAT = re.compile(r'[^@]+@[^@]+\.[^@]+')
 TELF_FORMAT = re.compile(r'\+[0-9]+\s.*')
 
-class restaurant:
+class restaurant(object):
     nom = ""
     horari = ""
     latitud = ""
@@ -79,29 +79,29 @@ class MHTMLParser(HTMLParser):
         elif(self.ctag == 'v:country-name'):
             self.crest.pais = data
         
+def genera_csv():
+    try:
+        f = open('restaurants.rdf', 'rb')
+    except:
+        print "No s'ha trobat l'arxiu restaurants.rdf"
+        exit()
+    rdfSource = f.read()
+    f.close()
 
-try:
-    f = open('restaurants.rdf', 'rb')
-except:
-    print "No s'ha trobat l'arxiu restaurants.rdf"
-    exit()
-rdfSource = f.read()
-f.close()
+    parser = MHTMLParser()
+    parser.feed(rdfSource)
 
-parser = MHTMLParser()
-parser.feed(rdfSource)
+    csvf = open('restaurants.csv', 'wb')
+    fitxer = csv.writer(csvf, delimiter='\t')
+    fitxer.writerow(["Nom"] + ["Latitud"] + ["Longitud"] + ["Telèfon 1"] + ["Telèfon 2"] +
+    ["Adreça"] + ["Barri"] + ["Districte"] + ["Codi Postal"] + ["Ciutat"] + ["Regio"] +
+    ["Pais"] + ["Web"] + ["Propietari"] + ["Correu electrònic"] )
 
-csvf = open('restaurants.csv', 'wb')
-fitxer = csv.writer(csvf, delimiter='\t')
-fitxer.writerow(["Nom"] + ["Latitud"] + ["Longitud"] + ["Telèfon 1"] + ["Telèfon 2"] +
- ["Adreça"] + ["Barri"] + ["Districte"] + ["Codi Postal"] + ["Ciutat"] + ["Regio"] +
- ["Pais"] + ["Web"] + ["Propietari"] + ["Correu electrònic"] )
+    for elem in allrest:
+        fitxer.writerow([elem.nom] + [elem.latitud] + [elem.longitud] + [elem.telf1] +
+        [elem.telf2] + [elem.adreca] + [elem.barri] + [elem.districte] + [elem.cp] +
+        [elem.ciutat] + [elem.regio] + [elem.pais] + [elem.web] +
+        [elem.propietari] + [elem.mail])
 
-for elem in allrest:
-    fitxer.writerow([elem.nom] + [elem.latitud] + [elem.longitud] + [elem.telf1] +
-     [elem.telf2] + [elem.adreca] + [elem.barri] + [elem.districte] + [elem.cp] +
-     [elem.ciutat] + [elem.regio] + [elem.pais] + [elem.web] +
-     [elem.propietari] + [elem.mail])
-
-csvf.close()
+    csvf.close()
 

@@ -5,18 +5,21 @@ import re
 import os
 import csv
 from sets import Set
-from rdf2csv import restaurant
+from rdf2csv import restaurant, genera_csv
 
 restaurants = {}
+STRING_FORM = re.compile(r'[\"\']?\w+[\s\w*]*[\"\']?')
+
 
 def guardaRestaurants():
     global restaurants
     try:
         restcsv = open('restaurants.csv', 'rb')
     except:
-        execfile("rdf2csv.py")
+        print "restaurants.csv no trobat, generant..."
+        genera_csv()
         restcsv = open('restaurants.csv','rb')
-    csvreader = csv.reader(restcsv)
+    csvreader = csv.reader(restcsv, delimiter='\t')
     parameters = (["nom"] + ["latitud"] + ["longitud"] + ["tel1"] +
     ["tel2"] + ["adreca"] + ["barri"] + ["districte"] + ["cp"] +
     ["ciutat"] + ["regio"] + ["pais"] + ["web"] +
@@ -31,6 +34,11 @@ def guardaRestaurants():
 #    return [x for x in llista if patro in x]
 
 def processaQuery(query, llista):
+    try:
+        if(STRING_FORM.match(query) is None):
+            query = eval(query)
+    except:
+        pass
     if(isinstance(query, list)):
         #Complir una condició -> unió
         ret = Set()
@@ -45,12 +53,10 @@ def processaQuery(query, llista):
         return ret
     elif(isinstance(query, str)):
         #Buscar el string a la llista de noms
-        return [x for x in llista if patro in x]
+        ret = [x for x in llista if query in x]
+        return Set(ret)
 
-
-def main():
-    guardaRestaurants()
-    input = raw_input("Quina cerca voleu fer?\n")
-    rests = processaQuery(eval(query), Set(restaurants.keys()))
-    print rests
-
+guardaRestaurants()
+query = raw_input("Introduïu els criteris de cerca:\n")
+rests = processaQuery(eval(query), Set(restaurants.keys()))
+print len(rests)
