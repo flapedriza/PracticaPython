@@ -12,7 +12,7 @@ STRING_FORM = re.compile(r'[\"\']?\w+[\s\w*]*[\"\']?')
 
 
 def guardaRestaurants():
-    global restaurants
+    ret = {}
     try:
         restcsv = open('restaurants.csv', 'rb')
     except:
@@ -28,10 +28,8 @@ def guardaRestaurants():
         r = restaurant()
         for i in range(0,len(parameters)):
             r.__setattr__(parameters[i], fila[i])
-        restaurants[r.nom] = r
-
-#def trobaRestaurants(patro, llista):
-#    return [x for x in llista if patro in x]
+        ret[r.nom] = r
+    return ret
 
 def processaQuery(query, llista):
     try:
@@ -56,7 +54,9 @@ def processaQuery(query, llista):
         ret = [x for x in llista if query in x]
         return Set(ret)
 
-guardaRestaurants()
+"""
+restaurants = guardaRestaurants()
 query = raw_input("Introduïu els criteris de cerca:\n")
 rests = processaQuery(eval(query), Set(restaurants.keys()))
 print len(rests)
+"""
