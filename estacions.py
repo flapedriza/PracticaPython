@@ -79,7 +79,7 @@ def estacions_a_prop(estacions, lat, lon):
         dist = e.distancia(lat, lon)
         if dist <= 1:
             insert((dist,e), ret)
-            
+
     return [y for (x,y) in ret]
 
 def insert(elem, lst):
@@ -90,10 +90,10 @@ def insert(elem, lst):
         lst.insert(i, elem)
 
 if(__name__ == '__main__'):
-    #41.385001, 2.166242
+    #41.385335, 2.169668 McDonald's Catalunya
     estac = getEstacions()
     print "\n\nAMB BICIS:"
-    esta = estacionsBicis(estacions_a_prop(estac, 41.385001, 2.166242))
+    esta = estacionsBicis(estacions_a_prop(estac, 41.385335, 2.169668))
     for est in esta:
         print est
     esta = estacionsLlocs(estac)
