@@ -38,17 +38,17 @@ class Estacio(object):
     def __str__(self):
         return "%s - %s%s (%s llocs | %s bicis)" % \
         (self.id, self.street, self.streetNumber, self.slots, self.bikes)
-    def disponible():
+    def disponible(self):
         return self.status == 'OPN'
-    def te_aparcaments():
+    def te_llocs(self):
         return self.slots > 0
-    def te_bicis():
+    def te_bicis(self):
         return self.bikes > 0
-    def distancia(latitud, longitud):
+    def distancia(self,latitud, longitud):
         return haversine(latitud, longitud, self.lat, self.long)
 
 def getEstacions():
-    ret = {}
+    ret = []
     request = urllib2.Request(URL_BICING)
     url = urllib2.urlopen(request)
     xml = url.read()
@@ -62,9 +62,41 @@ def getEstacions():
                 if(not text): text = ""
                 else: text = ", " + text
             e.__setattr__(k, v(text))
-        ret[e.id] = e
+        ret.append(e)
     return ret
 
-esta = getEstacions()
-for e in esta.values():
-    print e
+def estacionsBicis(estacions):
+    ret = [x for x in estacions if x.te_bicis() and x.disponible()]
+    return ret
+
+def estacionsLlocs(estacions):
+    ret = [x for x in estacions if x.te_llocs() and x.disponible()]
+    return ret
+
+def estacions_a_prop(estacions, lat, lon):
+    ret = []
+    for e in estacions:
+        dist = e.distancia(lat, lon)
+        if dist <= 1:
+            insert((dist,e), ret)
+            
+    return [y for (x,y) in ret]
+
+def insert(elem, lst):
+    if(len(lst) == 0): lst.append(elem)
+    else:
+        i = 0
+        while lst[i][0] < elem[0] and i < len(lst)-1: i+=1
+        lst.insert(i, elem)
+
+if(__name__ == '__main__'):
+    #41.385001, 2.166242
+    estac = getEstacions()
+    print "\n\nAMB BICIS:"
+    esta = estacionsBicis(estacions_a_prop(estac, 41.385001, 2.166242))
+    for est in esta:
+        print est
+    esta = estacionsLlocs(estac)
+    print "\n\nAMB LLOCS:"
+    for est in esta:
+        print est
