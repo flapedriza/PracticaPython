@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # coding=utf8
+import webbrowser
 from sets import Set
 from rdf2csv import restaurant, genera_csv
 from searchRestaurants import guardaRestaurants, processaQuery
@@ -16,9 +17,9 @@ principi = """<!DOCTYPE html>
 <meta charset="UTF-8">
 <title>Resultats cerca</title>
 </head>
-<body>
-<p><b>Heu cercat:</b> %s</p>
-<table border="1" style="width:100%">
+<body>\n"""
+
+segueix = """<table border="1" style="width:100%">
 <tr style="background-color:#00FF00">
 <td><b>Nom</b></td>
 <td><b>Latitud</b></td>
@@ -70,6 +71,8 @@ def creaTaula(restaurants, estacions):
 def generaHtml(restaurants, estacions, cerca):
     f = open("restaurants.html", "w")
     f.write(principi)
+    f.write("<p><b>Heu cercat: </b>%s i s'han retornat %s resultats</p>\n" % (cerca, len(restaurants)))
+    f.write(segueix)
     f.write(creaTaula(restaurants, estacions))
     f.write(final)
     f.close()
@@ -77,12 +80,10 @@ def generaHtml(restaurants, estacions, cerca):
 if(__name__ == '__main__'):
     diccionariRest = guardaRestaurants()
     estacions = getEstacions()
-    query = "\"Domino\""
+    query = raw_input("Introduïu la cerca a realitzar:\n")
     rests = processaQuery(eval(query), Set(diccionariRest.keys()))
     rests = [diccionariRest[x] for x in rests]
-    for r in rests:
-        print r.latitud
-    print "+++++++++++++%s" % type(rests)
     generaHtml(rests, estacions, query)
+    webbrowser.open('restaurants.html')
 
 
