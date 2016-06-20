@@ -71,7 +71,7 @@ def creaTaula(restaurants, estacions):
 def generaHtml(restaurants, estacions, cerca):
     f = open("restaurants.html", "w")
     f.write(principi)
-    f.write("<p><b>Heu cercat: </b>%s i s'han retornat %s resultats</p>\n" % (cerca, len(restaurants)))
+    f.write("<p><b>Heu cercat: </b>%s</p>\n<p>S'han retornat %s resultats</p>\n" % (cerca, len(restaurants)))
     f.write(segueix)
     f.write(creaTaula(restaurants, estacions))
     f.write(final)

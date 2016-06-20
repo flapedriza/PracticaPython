@@ -12,7 +12,6 @@ TELF_FORMAT = re.compile(r'\+[0-9]+\s.*')
 
 class restaurant(object):
     nom = ""
-    horari = ""
     latitud = ""
     longitud = ""
     telf1 = ""

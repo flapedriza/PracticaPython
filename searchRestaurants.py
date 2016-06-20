@@ -54,9 +54,8 @@ def processaQuery(query, llista):
         ret = [x for x in llista if query in x]
         return Set(ret)
 
-"""
-restaurants = guardaRestaurants()
-query = raw_input("Introduïu els criteris de cerca:\n")
-rests = processaQuery(eval(query), Set(restaurants.keys()))
-print len(rests)
-"""
+if __name__ == "__main__":
+    restaurants = guardaRestaurants()
+    query = raw_input("Introduïu els criteris de cerca:\n")
+    rests = processaQuery(eval(query), Set(restaurants.keys()))
+    print len(rests)
