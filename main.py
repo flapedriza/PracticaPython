@@ -49,7 +49,7 @@ def posaEstacions(rest, estacions):
     bicis = estacionsBicis(aprop)
     llocs = estacionsLlocs(aprop)
     strBici = "<ul>\n"
-    strLloc = ""
+    strLloc = "<ul>\n"
     for est in bicis:
         strBici += "<li>%s</li>\n" % est
     for est in llocs:
